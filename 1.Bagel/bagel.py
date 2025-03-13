@@ -23,7 +23,6 @@ def generate_number():
 def check(user_guess, password):
     # * Checks the code with user's guess and returns the answer
     answers = []
-    print(f"First answer: {answers}")
     for i in range(len(user_guess)):
         if user_guess[i] == password[i]:
             answers.append("Fermi")
@@ -34,12 +33,12 @@ def check(user_guess, password):
 
         if len(answers) == 0:
             return "Bagel"
-    return(answers)
+
+    return " ".join(answers)
 
 def game():
     MAX_ATTEMPS = 10
     code = generate_number()
-    print(code)
 
     while MAX_ATTEMPS > 0:
         guess = input("Enter 3 numbers: ")
@@ -47,7 +46,6 @@ def game():
         if not re.fullmatch(pattern, guess):
             print("Your input is not correct. Try again:")
             continue
-    
         if guess == code:
             print("You got it!!")
             break
@@ -61,7 +59,6 @@ def game():
         print("You lose.")
 
 stop = True 
-
 while stop:
     game()
     answer = input("Keep playing? yes or no? \n")
