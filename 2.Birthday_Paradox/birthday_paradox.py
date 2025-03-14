@@ -3,7 +3,6 @@ from datetime import datetime
 import calendar
 
 def generate_day(quantity):
-
     months = []
 
     for i in range(quantity):
@@ -20,9 +19,8 @@ def generate_day(quantity):
         birthday = [day_, month_]
         months.append(birthday)
 
-    for i in months:
-        print(' '.join(i))
+    return months
 
+day = generate_day(quantity=int(input("How many birthdays shall I generate? (Max 100)")))
 
-generate_day(quantity=int(input("How many birthdays shall I generate? (Max 100)")))
-
+print(day)
