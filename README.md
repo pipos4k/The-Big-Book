@@ -1,4 +1,5 @@
 # The Big Book
 
-This is a project with a lot little problems that I start to solve with Python.
+This is a combination of little problems which I solved using Python.
 
+reference: The Big Book from Al Sweigart
