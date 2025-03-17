@@ -1,5 +1,4 @@
 import random
-from datetime import datetime
 import calendar
 
 def generate_day(quantity):
