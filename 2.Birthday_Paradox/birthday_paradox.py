@@ -52,5 +52,8 @@ for i in range(100000):
     ejento_day = generate_day(people)
     ejento_day.sort()
     calculates_thousand(ejento_day)
-            
-print(mega_counter)
+
+percentage = (counter / 100000) * 100
+
+print(f"Out of 100,000 simulations of {people} people, there was a matching birthday in that group {counter} times.")
+print(f"So we have {percentage:.2f}% chance for {people} people.")
