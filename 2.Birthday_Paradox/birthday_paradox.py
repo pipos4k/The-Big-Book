@@ -27,7 +27,6 @@ counter = 0
 
 for i in range(len(day)):
     print(f"{day[i][1][:3]} {day[i][0]}", end=", ")
-    # print(i)
     if day[i] == day[i-1]:
         print("True")
         counter +=1
