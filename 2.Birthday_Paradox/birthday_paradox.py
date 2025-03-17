@@ -21,6 +21,17 @@ def generate_day(quantity):
 
     return months
 
-day = generate_day(quantity=int(input("How many birthdays shall I generate? (Max 100)")))
+day = generate_day(quantity=int(input("How many birthdays shall I generate? (Max 100)\n")))
 
-print(day)
+day.sort()
+counter = 0
+
+for i in range(len(day)):
+    print(f"{day[i][1][:3]} {day[i][0]}", end=", ")
+    # print(i)
+    if day[i] == day[i-1]:
+        print("True")
+        counter +=1
+
+print("\n")
+print(f"We find {counter} same days.")
