@@ -10,7 +10,17 @@ BACKSIDE = 'backside'
 
 # todo bets/double down/stand
 # todo win/lose/draw
-# todo compare cards 
+
+# compares cards
+def compare_cards(user):
+    calculate_cards = 0
+    for i in user:
+        if i[0] == "A" or i[0] == "K" or i[0] == "Q" or i[0] == "J" or i[0] == "1":
+            calculate_cards += 10
+        else:
+            calculate_cards += int(i[0])
+
+    return calculate_cards
 
 # Makes the deck with 52 cards
 def make_deck():
@@ -58,7 +68,7 @@ for i in range(2):
     card = deck.pop()
     dealers_hand.append(card)
 
-
+print(f"PLAYER'S HAND: {compare_cards(players_hand)}")
 share_cards(players_hand)
+print(f"DEALER'S HAND: {compare_cards(dealers_hand)}")
 share_cards(dealers_hand)
-
