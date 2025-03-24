@@ -87,6 +87,28 @@ def calculate(player, dealer):
 
     return result
 
+
+def game():
+    deck = make_deck()
+
+    players_hand = []
+    dealers_hand = []
+    give_cards(2, players_hand)
+    give_cards(2, dealers_hand)
+
+    players_cards_sum = calculate_cards(players_hand)
+    dealers_cards_sum = calculate_cards(dealers_hand)
+    print(f"Money: {money}")
+    bet = int(input("How much do you bet?"))
+
+    print(f"DEALER: ??")
+    share_visual_cards(dealers_hand)
+    print(f"PLAYER: {players_cards_sum}")
+    share_visual_cards(players_hand)
+    print(dealers_cards_sum)
+
+    choice = input("(H)it, (S)tand, (D)ouble down: ")
+
 money = 5000
 
 while money > 0:
@@ -100,15 +122,13 @@ while money > 0:
     players_cards_sum = calculate_cards(players_hand)
     dealers_cards_sum = calculate_cards(dealers_hand)
     print(f"Money: {money}")
-    print("How much do you bet?")
-    bet = int(input())
+    bet = int(input("How much do you bet?"))
 
     print(f"DEALER: ??")
     share_visual_cards(dealers_hand)
     print(f"PLAYER: {players_cards_sum}")
     share_visual_cards(players_hand)
     print(dealers_cards_sum)
-
 
     choice = input("(H)it, (S)tand, (D)ouble down: ")
 
