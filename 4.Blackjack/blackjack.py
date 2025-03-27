@@ -11,6 +11,11 @@ BACKSIDE = chr(35)
 # Compares cards
 def compare_cards(user):
     calculate_cards = 0
+    calculate_cards_test = 0
+    for i in range(len(user)):
+        calculate_cards_test += user[i][0]
+        pass
+
     if user[0][0] == "A" and user[1][0] == "A":
         calculate_cards += 21
         return calculate_cards
@@ -39,7 +44,7 @@ def share_visual_cards(hand):
     global choice
     rows = ["", "", "", ""]
 
-    if hand == dealers_hand and choice != "s":
+    if hand == dealers_hand and choice != "s" and choice != "d":
         for i in range(1):
             rows[1] += (f"|{BACKSIDE}  |")
             rows[2] += (f"| {BACKSIDE} |")
@@ -56,7 +61,7 @@ def share_visual_cards(hand):
                 rows[1] += (f"|{hand[line][0]}  |")
                 rows[2] += (f"| {hand[line][2]} |")
                 rows[3] += (f"|__{hand[line][0]}|")
-        if hand == dealers_hand and choice != "s":
+        if hand == dealers_hand and choice != "s" and choice != "d":
             break
 
     for row in rows: # Prints them to monitor
@@ -100,11 +105,23 @@ while money > 0:
     give_cards(2, players_hand)
     give_cards(2, dealers_hand)
 
+    calculate_cards_test = 0
+    for i in range(len(players_hand)):
+        if players_hand[i][0] == "J" or players_hand[i][0] == "Q" or players_hand[i][0] == "K" or players_hand[i][0] == "A":
+            calculate_cards_test += 10
+        elif players_hand[i][0] == "1" and players_hand[i][1] == "0":
+            calculate_cards_test += 10
+            
+        calculate_cards_test += int(players_hand[i][0])
+    
+    print(players_hand)
+    print(calculate_cards_test)
+
+    break
     # Checks if player and dealer have double "A" and calculates the cards
     players_cards_sum = compare_cards(players_hand)
     dealers_cards_sum = compare_cards(dealers_hand)
 
-    money = 5000
     print(f"Money: {money}")
     while True:
         try:
@@ -117,7 +134,6 @@ while money > 0:
                 break
         except ValueError:
             print(ValueError("You insert an invalid input."))
-            continue
         
     # while loop until player wins or loses
     while players_cards_sum < 22:
@@ -145,6 +161,34 @@ while money > 0:
             while dealers_cards_sum < 17:
                 give_cards(1, dealers_hand)
                 dealers_cards_sum = compare_cards(dealers_hand)
+            print(f"DEALER: {dealers_cards_sum}")
+            share_visual_cards(dealers_hand)
+            print(f"PLAYER: {players_cards_sum}")
+            share_visual_cards(players_hand)
+            print(calculate(players_cards_sum, dealers_cards_sum))
+            break
+
+        elif choice == "d":
+            while True:
+                try:
+                    double_bet = int(input(f"How much do you bet> 1 - {bet} > ")) # bet input
+                    if double_bet > bet or double_bet < 1:
+                        NError = ValueError("You must bet between your money.")
+                        print(NError)
+                        continue
+                    if isinstance(double_bet, int):
+                        break
+                except ValueError:
+                    print(ValueError("You insert an invalid input."))
+
+            bet += double_bet
+            give_cards(1, players_hand)
+            players_cards_sum = compare_cards(players_hand)
+
+            while dealers_cards_sum < 17:
+                give_cards(1, dealers_hand)
+                dealers_cards_sum = compare_cards(dealers_hand)
+
             print(f"DEALER: {dealers_cards_sum}")
             share_visual_cards(dealers_hand)
             print(f"PLAYER: {players_cards_sum}")
