@@ -8,8 +8,8 @@ CLUBS    = chr(9827) # Character 9827 is '♣'.
 # (A list of chr codes is at https://inventwithpython.com/charactermap)
 BACKSIDE = chr(35)
 
-# compares cards
-def calculate_cards(user):
+# Compares cards
+def compare_cards(user):
     calculate_cards = 0
     if user[0][0] == "A" and user[1][0] == "A":
         calculate_cards += 21
@@ -36,9 +36,10 @@ def make_deck():
 # Shares the cards for dealer and player as visual
 def share_visual_cards(hand):
     # Makes 2 lists, one to pop the cards and other to display them on the screen
+    global choice
     rows = ["", "", "", ""]
 
-    if hand == dealers_hand:
+    if hand == dealers_hand and choice != "s":
         for i in range(1):
             rows[1] += (f"|{BACKSIDE}  |")
             rows[2] += (f"| {BACKSIDE} |")
@@ -55,7 +56,7 @@ def share_visual_cards(hand):
                 rows[1] += (f"|{hand[line][0]}  |")
                 rows[2] += (f"| {hand[line][2]} |")
                 rows[3] += (f"|__{hand[line][0]}|")
-        if hand == dealers_hand:
+        if hand == dealers_hand and choice != "s":
             break
 
     for row in rows: # Prints them to monitor
@@ -87,62 +88,74 @@ def calculate(player, dealer):
 
     return result
 
-
-def game():
-    deck = make_deck()
-
-    players_hand = []
-    dealers_hand = []
-    give_cards(2, players_hand)
-    give_cards(2, dealers_hand)
-
-    players_cards_sum = calculate_cards(players_hand)
-    dealers_cards_sum = calculate_cards(dealers_hand)
-    print(f"Money: {money}")
-    bet = int(input("How much do you bet?"))
-
-    print(f"DEALER: ??")
-    share_visual_cards(dealers_hand)
-    print(f"PLAYER: {players_cards_sum}")
-    share_visual_cards(players_hand)
-    print(dealers_cards_sum)
-
-    choice = input("(H)it, (S)tand, (D)ouble down: ")
-
+# Coins to play
 money = 5000
-
 while money > 0:
     deck = make_deck()
+    choice = ""
 
+    # Creates 2 decks and shares cards
     players_hand = []
     dealers_hand = []
     give_cards(2, players_hand)
     give_cards(2, dealers_hand)
 
-    players_cards_sum = calculate_cards(players_hand)
-    dealers_cards_sum = calculate_cards(dealers_hand)
+    # Checks if player and dealer have double "A" and calculates the cards
+    players_cards_sum = compare_cards(players_hand)
+    dealers_cards_sum = compare_cards(dealers_hand)
+
+    money = 5000
     print(f"Money: {money}")
-    bet = int(input("How much do you bet?"))
-
-    print(f"DEALER: ??")
-    share_visual_cards(dealers_hand)
-    print(f"PLAYER: {players_cards_sum}")
-    share_visual_cards(players_hand)
-    print(dealers_cards_sum)
-
-    choice = input("(H)it, (S)tand, (D)ouble down: ")
-
-    if choice == "H":
-        if players_cards_sum > 21:
-            print("You overdraw")
+    while True:
+        try:
+            bet = int(input("How much do you bet> ")) # bet input
+            if bet > money or bet < 1:
+                NError = ValueError("You must bet between your money.")
+                print(NError)
+                continue
+            if isinstance(bet, int):
+                break
+        except ValueError:
+            print(ValueError("You insert an invalid input."))
             continue
         
-        give_cards(1, players_hand)
+    # while loop until player wins or loses
+    while players_cards_sum < 22:
+        # Shows cards for dealer and player
+        print(f"DEALER: ?? {dealers_cards_sum}")
+        share_visual_cards(dealers_hand)
+        print(f"PLAYER: {players_cards_sum}")
         share_visual_cards(players_hand)
+        
 
-    elif choice == "S":
-        print(calculate(players_cards_sum, dealers_cards_sum))
+        # Takes player's choice 
+        choice = input("(H)it, (S)tand: ").lower()
+        if choice == "h":
+            give_cards(1, players_hand)
+            share_visual_cards(players_hand)
+            players_cards_sum = compare_cards(players_hand)
 
-   
-  
-      
+            if players_cards_sum > 21:
+                print(f"You overdraw and lost {bet}")
+                money -= bet
+                break
+
+        elif choice == "s":
+            print("\n" * 4)
+            while dealers_cards_sum < 17:
+                give_cards(1, dealers_hand)
+                dealers_cards_sum = compare_cards(dealers_hand)
+            print(f"DEALER: {dealers_cards_sum}")
+            share_visual_cards(dealers_hand)
+            print(f"PLAYER: {players_cards_sum}")
+            share_visual_cards(players_hand)
+            print(calculate(players_cards_sum, dealers_cards_sum))
+            break
+
+    # Checks if player want to play again
+    play_again = input("Play again? y or n > ")       
+    if play_again == "n":
+        print("Thanks for playing.")
+        break
+
+    print("\n" * 4)
