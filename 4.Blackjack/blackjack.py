@@ -11,19 +11,25 @@ BACKSIDE = chr(35)
 # Compares cards
 def compare_cards(user):
     calculate_cards = 0
-    calculate_cards_test = 0
-    for i in range(len(user)):
-        calculate_cards_test += user[i][0]
-        pass
+    a_count = 0
 
-    if user[0][0] == "A" and user[1][0] == "A":
-        calculate_cards += 21
-        return calculate_cards
-    for i in user:
-        if i[0] == "A" or i[0] == "K" or i[0] == "Q" or i[0] == "J" or i[0] == "1":
+    for i in range(len(user)):
+        if user[0][0] == "A" and user[1][0] == "A" and len(user) == 2:
+            calculate_cards = 21
+            return calculate_cards
+        if user[i][0] == "A":
+            calculate_cards += 11
+            a_count +=1
+        elif user[i][0] in {"J", "Q", "K"}:
+            calculate_cards += 10
+        elif user[i][0] == "1" and user[i][1] == "0":
             calculate_cards += 10
         else:
-            calculate_cards += int(i[0])
+            calculate_cards += int(user[i][0])
+            
+    while calculate_cards > 21 and a_count > 0:
+        calculate_cards -= 10
+        a_count -= 1 
     return calculate_cards
 
 # Creates deck with 52 cards
@@ -32,9 +38,9 @@ def make_deck():
     for i in range(2, 11):
         for j in(HEARTS, DIAMONDS, SPADES, CLUBS):
             deck.append(f"{i} {j}")
-    for characters in("J", "Q", "K", "A"):
-            for j in(HEARTS, DIAMONDS, SPADES, CLUBS):
-                deck.append(f"{characters} {j}")
+    for characters in("J", "Q", "K","A"): #"J", "Q", "K", 
+        for j in(HEARTS, DIAMONDS, SPADES, CLUBS):
+            deck.append(f"{characters} {j}")
     random.shuffle(deck)
     return deck
 
@@ -105,19 +111,7 @@ while money > 0:
     give_cards(2, players_hand)
     give_cards(2, dealers_hand)
 
-    calculate_cards_test = 0
-    for i in range(len(players_hand)):
-        if players_hand[i][0] == "J" or players_hand[i][0] == "Q" or players_hand[i][0] == "K" or players_hand[i][0] == "A":
-            calculate_cards_test += 10
-        elif players_hand[i][0] == "1" and players_hand[i][1] == "0":
-            calculate_cards_test += 10
-            
-        calculate_cards_test += int(players_hand[i][0])
     
-    print(players_hand)
-    print(calculate_cards_test)
-
-    break
     # Checks if player and dealer have double "A" and calculates the cards
     players_cards_sum = compare_cards(players_hand)
     dealers_cards_sum = compare_cards(dealers_hand)
@@ -140,12 +134,13 @@ while money > 0:
         # Shows cards for dealer and player
         print(f"DEALER: ?? {dealers_cards_sum}")
         share_visual_cards(dealers_hand)
+        print("\n")
         print(f"PLAYER: {players_cards_sum}")
         share_visual_cards(players_hand)
         
 
         # Takes player's choice 
-        choice = input("(H)it, (S)tand: ").lower()
+        choice = input("(H)it, (S)tand: (D)ouble down. >").lower()
         if choice == "h":
             give_cards(1, players_hand)
             share_visual_cards(players_hand)
@@ -155,7 +150,8 @@ while money > 0:
                 print(f"You overdraw and lost {bet}")
                 money -= bet
                 break
-
+            
+ 
         elif choice == "s":
             print("\n" * 4)
             while dealers_cards_sum < 17:
