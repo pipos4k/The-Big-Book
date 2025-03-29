@@ -116,7 +116,7 @@ while money > 0:
     players_cards_sum = compare_cards(players_hand)
     dealers_cards_sum = compare_cards(dealers_hand)
 
-    print(f"Money: {money}")
+    print(f"Money: {money}$")
     while True:
         try:
             bet = int(input("How much do you bet> ")) # bet input
@@ -138,9 +138,12 @@ while money > 0:
         print(f"PLAYER: {players_cards_sum}")
         share_visual_cards(players_hand)
         
-
         # Takes player's choice 
-        choice = input("(H)it, (S)tand: (D)ouble down. >").lower()
+        if len(players_hand) == 2:
+            choice = input("(H)it, (S)tand, (D)ouble down. >").lower()
+        else:
+            choice = input("(H)it, (S)tand. >").lower()
+            
         if choice == "h":
             give_cards(1, players_hand)
             share_visual_cards(players_hand)
@@ -191,11 +194,22 @@ while money > 0:
             share_visual_cards(players_hand)
             print(calculate(players_cards_sum, dealers_cards_sum))
             break
-
-    # Checks if player want to play again
-    play_again = input("Play again? y or n > ")       
-    if play_again == "n":
-        print("Thanks for playing.")
+    
+    if money < 1:
+        print("You went bankrupt!!")
         break
 
+    # Checks if player want to play again
+
+    while True:
+        play_again = input("Play again? y or n > ")
+        if play_again == "n":
+            print(f"You leave with: {money}$")
+            print("Thanks for playing.")
+            quit()
+        elif play_again == "y":
+            break
+        else:
+            print("You insert an invalid input.")
+    
     print("\n" * 4)
