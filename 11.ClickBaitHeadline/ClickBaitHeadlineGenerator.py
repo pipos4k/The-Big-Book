@@ -50,6 +50,6 @@ for i in range(number_of_headlines):
         plurnoun2 = random.choice(NOUNS) + 's',
         place = random.choice(PLACES),
         when = random.choice(WHEN),
-        number = random.randint(5, 20),
-        number2 = random.randint(3, 10),
+        number = random.randint(8, 23),
+        number2 = random.randint(2, 7),
 ))
