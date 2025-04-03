@@ -37,3 +37,4 @@ venv.bak/
 **/thebigbookvenv
 test.py
 5.BouncingDVD 
+**/14.Countdown/__pycache__
